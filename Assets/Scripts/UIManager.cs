@@ -6,6 +6,8 @@ public class UIManager : MonoBehaviour
 {
     public GameObject player;
     public Spawner gameController;
+    public ScoreManager scoreManager;
+
     public GameObject score;
     public GameObject classicButton;
     public GameObject endlessButton;
@@ -157,6 +159,12 @@ public class UIManager : MonoBehaviour
         {
             MainMenuGUI();
         }
+    }
+
+    public void ResultsUI()
+    {
+        //todo flush this out
+        scoreManager.UpdateResultsDisplay();
     }
 
     void Update()

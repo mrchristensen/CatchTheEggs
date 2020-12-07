@@ -8,7 +8,6 @@ public class Player : MonoBehaviour
 {
     private bool leftDown = false;
     private bool rightDown = false;
-    private int score = 0;
     private AudioSource mySound;
     private Vector3 leftPos = new Vector3(-1.75f, .59f, 0);
     private Vector3 centerPos = new Vector3(0, .59f, 0);
@@ -16,13 +15,12 @@ public class Player : MonoBehaviour
     public AudioClip eggCaught;
     public AudioClip gemCaught;
     public AudioClip spikeyBallCaught;
-    public Text scoreText;
+    public ScoreManager scoreManager;
     public Button pauseButton;
 
     void Start()
     {
-        mySound = GetComponent<AudioSource>(); //Link the variable to the audio component
-        updateScore(); //Prime the score
+        mySound = GetComponent<AudioSource>(); //Link the variable to the audio 
         Debug.Log(Screen.width);
     }
 
@@ -109,17 +107,14 @@ public class Player : MonoBehaviour
     {
        if(caughtObject.gameObject.tag == "Egg")
         {
-            score++;
             mySound.clip = eggCaught;
         }
        else if (caughtObject.gameObject.tag == "Gem")
         {
-            score += 3;
             mySound.clip = gemCaught;
         }
        else if (caughtObject.gameObject.tag == "Spike")
         {
-            score -= 5;
             mySound.clip = spikeyBallCaught;
         }
        else
@@ -127,46 +122,8 @@ public class Player : MonoBehaviour
             Debug.Log("Error!  Caught something that's wasn't expected");
         }
         mySound.Play();
-        updateScore();
+        scoreManager.UpdateScore(caughtObject.gameObject.tag);
         Destroy(caughtObject.gameObject);
-    }
-
-    public void updateScore(int newScore) //If we pass in a variable update our score and then do the normal stuff
-    {
-        score = newScore;
-        updateScore();
-    }
-    void updateScore()
-    {
-        score = Mathf.Clamp(score, 0, 999999); //Limits the score betweeen 0 and 999999 (no nagative values or overflow)
-        string scoreWithZeros = "";
-
-        //Fills in the rest of the score with zeros (depending on values)
-        if (score > 99999)
-        {
-            scoreWithZeros = score.ToString();
-        }
-        else if (score > 9999)
-        {
-            scoreWithZeros = "0" + score.ToString();
-        }
-        else if (score > 999)
-        {
-            scoreWithZeros = "00" + score.ToString();
-        }
-        else if (score > 99)
-        {
-            scoreWithZeros = "000" + score.ToString();
-        }
-        else if (score > 9)
-        {
-            scoreWithZeros = "0000" + score.ToString();
-        }
-        else //if (score >= 0)
-        {
-            scoreWithZeros = "00000" + score.ToString();
-        }
-        scoreText.text = "Score: " + scoreWithZeros;
     }
 
     public void Disable()
@@ -175,5 +132,24 @@ public class Player : MonoBehaviour
         leftDown = false;
         rightDown = false;
         this.enabled = false;
+    }
+
+    //Getters
+    public int GetTotalEggs() //todo fix this
+    {
+        //return totalEggs;
+        return 0;
+    }
+
+    public int GetTotalGems() //todo fix this
+    {
+        //return totalGems;
+        return 0;
+    }
+
+    public int GetTotalSpikes() //todo fix this
+    {
+        //return totalSpikes;
+        return 0;
     }
 }

@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//TODO: When you spawn the last egg mark it as the last one so you can fix detecting the end of a game
+//TODO: Enums for difficulty?
+
 public class Spawner : MonoBehaviour
 {
     public GameObject egg;
@@ -17,10 +20,11 @@ public class Spawner : MonoBehaviour
     public float EasySpeed = 5f;
     public float NormalSpeed = 6f;
     public float HardSpeed = 7f;
-    private int i = 0;
+    private int lineNumIndex = 0; //Todo fix this
     private bool reset = false;
     private List<string> usedSpawnSet = new List<string>();
-    private const int numSets = 3;
+    private const int classicNumSets = 3; //The number of sets to add to the queue for a classic game
+    private const int numSets = 3; //The number of all the possible sets that I've hand created
     private string gamemode;
     private string difficulty;
 
@@ -42,15 +46,15 @@ public class Spawner : MonoBehaviour
 
     void StartClassic(string difficulty)
     {
-        FillSpawnQueue(difficulty, 3);
-        InvokeRepeating("Spawn", 0, spawnrate);
+        FillSpawnQueue(difficulty, classicNumSets);
+        InvokeRepeating("SpawnLine", 0, spawnrate);
     }
 
     void StartEndless(string difficulty)  //Public to be able to recieve the message from the button
     {
         //UpdateSpeed();
-        FillSpawnQueue("Normal", 3);
-        InvokeRepeating("Spawn", 0, spawnrate);
+        FillSpawnQueue("Normal", 3); //Todo Fix this
+        InvokeRepeating("SpawnLine", 0, spawnrate); //Todo: there need to be a way to increase spawn rates
     }
 
     void FillSpawnQueue(string difficulty, int numSets) //Fills the Queue with x number of sets | x = numSets
@@ -66,12 +70,17 @@ public class Spawner : MonoBehaviour
             //Todo: if this is used for endless then we need to reset the usedSpawnSet after everything has been used.
             //Todo: Maybe a better sollution would be adding all the sets to a set, and then getting a random one from that set
 
+            Debug.Log("Fill spawn queue with setID: " + setID + ", on difficulty: " + difficulty);
             SendMessage(difficulty + setID);  //ie calls Easy0() in this script
             usedSpawnSet.Add(difficulty + setID);
 
-            }
         }
-        
+    }
+
+    void GenerateSpawnSet() //Makes all the strings in the list so that you can pick from which one to spawn in (Use this to generate a new set, or to refill an empty set)
+    {
+
+    }
 
     void UpdateSpeed(float speed)
     {
@@ -89,7 +98,7 @@ public class Spawner : MonoBehaviour
             CancelInvoke();
             spawnQueue.Clear();
             usedSpawnSet.Clear();
-            i = 0; //Resests the index for next game rotation
+            lineNumIndex = 0; //Resests the index for next game rotation
             UI.MainMenuGUI();
             player.GetComponent<Player>().Disable(); //Revoke controls from the player (and center them and reset bool vars)
             Debug.Log("Game Over");
@@ -109,32 +118,32 @@ public class Spawner : MonoBehaviour
         {
             GameObject.Destroy(myObject.gameObject);
         }
-        Time.timeScale = 1; //Because it's currently 0 while we're paused here
+        Time.timeScale = 1; //Because it's currently 0 if we're paused here
         ResetGame();
         Debug.Log("Game Quit");
     }
 
-    void Spawn()
+    void SpawnLine()
     {
-        if (i >= spawnQueue.Count) //If you've gone through the whole spawn queue) - End of Game
+        if (lineNumIndex >= spawnQueue.Count) //If you've gone through the whole spawn queue) - End of Game
         {
             CancelInvoke();
             ResetGame();
             return;
         }
-        if (spawnQueue[i].left != Spawnables.None) //If we need to spawn something
+        if (spawnQueue[lineNumIndex].left != Spawnables.None) //If we need to spawn something
         {
-            SpawnIn(spawnQueue[i].left, leftPos); //Do it (at the possition we checked for - left, right, or center)
+            SpawnIn(spawnQueue[lineNumIndex].left, leftPos); //Do it (at the possition we checked for - left, right, or center)
         }
-        if (spawnQueue[i].center != Spawnables.None)
+        if (spawnQueue[lineNumIndex].center != Spawnables.None)
         {
-            SpawnIn(spawnQueue[i].center, centerPos);
+            SpawnIn(spawnQueue[lineNumIndex].center, centerPos);
         }
-        if (spawnQueue[i].right != Spawnables.None)
+        if (spawnQueue[lineNumIndex].right != Spawnables.None)
         {
-            SpawnIn(spawnQueue[i].right, rightPos);
+            SpawnIn(spawnQueue[lineNumIndex].right, rightPos);
         }
-        i++;
+        lineNumIndex++;
     }
 
     void SpawnIn(Spawnables myObject, Transform myLocation)
@@ -143,11 +152,11 @@ public class Spawner : MonoBehaviour
         {
             Instantiate(egg, myLocation);
         }
-        if (myObject == Spawnables.Gem)
+        else if (myObject == Spawnables.Gem)
         {
             Instantiate(gem, myLocation);
         }
-        if (myObject == Spawnables.Spike)
+        else if (myObject == Spawnables.Spike)
         {
             Instantiate(spike, myLocation);
         }
