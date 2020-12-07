@@ -20,7 +20,7 @@ public class Spawner : MonoBehaviour
     private int i = 0;
     private bool reset = false;
     private List<string> usedSpawnSet = new List<string>();
-    private const int numEasySets = 3;
+    private const int numSets = 3;
     private string gamemode;
     private string difficulty;
 
@@ -40,36 +40,38 @@ public class Spawner : MonoBehaviour
         }
     }
 
-    void StartClassic(string diff)
+    void StartClassic(string difficulty)
     {
-        FillSpawnQueue(diff);
-        FillSpawnQueue(diff);
-        FillSpawnQueue(diff);
+        FillSpawnQueue(difficulty, 3);
         InvokeRepeating("Spawn", 0, spawnrate);
     }
 
-void StartEndless(string diff)  //Public to be able to recieve the message from the button
+    void StartEndless(string difficulty)  //Public to be able to recieve the message from the button
     {
         //UpdateSpeed();
-        FillSpawnQueue("Normal");
-        FillSpawnQueue("Normal");
-        FillSpawnQueue("Normal");
+        FillSpawnQueue("Normal", 3);
         InvokeRepeating("Spawn", 0, spawnrate);
     }
 
-    void FillSpawnQueue(string difficulty)
+    void FillSpawnQueue(string difficulty, int numSets) //Fills the Queue with x number of sets | x = numSets
     {
-        int j = Random.Range(0, numEasySets);
-        if (usedSpawnSet.Contains(difficulty + j)) //If we've already used that set try agains
+        for (int i = 0; i < numSets; i++)
         {
-            FillSpawnQueue(difficulty);
+            int setID;
+            do
+            {
+                setID = Random.Range(0, Spawner.numSets);
+            }
+            while (usedSpawnSet.Contains(difficulty + setID)); //If we've already used that set try again
+            //Todo: if this is used for endless then we need to reset the usedSpawnSet after everything has been used.
+            //Todo: Maybe a better sollution would be adding all the sets to a set, and then getting a random one from that set
+
+            SendMessage(difficulty + setID);  //ie calls Easy0() in this script
+            usedSpawnSet.Add(difficulty + setID);
+
+            }
         }
-        else
-        {
-            SendMessage(difficulty + j);  //ie calls Easy0() in this script
-            usedSpawnSet.Add(difficulty + j);
-        }
-    }
+        
 
     void UpdateSpeed(float speed)
     {
