@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: StringTable_es
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: es
+  m_SharedData: {fileID: 11400000, guid: 7c67f8f11d64dda4cb869aae42e3fcba, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 17495576576
+    m_Localized: Salir
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1771708698624
+    m_Localized: "Modo Cl\xE1sico"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2142497755136
+    m_Localized: Modo Infinito
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3223575416832
+    m_Localized: "F\xE1cil"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3434158837760
+    m_Localized: Normal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3582880468992
+    m_Localized: "Dif\xEDcil"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4006505172992
+    m_Localized: "\xBFQuieras cerrar el juego?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4467056529408
+    m_Localized: "S\xED"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4634350538752
+    m_Localized: No
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4780903714816
+    m_Localized: "\xBFQuieras dejar este juego?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4999263375360
+    m_Localized: Pausada/Pausar???
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 1
